@@ -7,9 +7,11 @@ namespace SnakeGame
     public class SpawnFood
     {
         private Vector2 foodGridPos;
+        private Vector2 invincibleApplePos;
         private int width, height;
         public static int randomPos;
         public GameObject foodGameObject;
+        public GameObject InvincibleAppleGameObject;
         private FoodEatingAnimation anim;                                                                                                    
         private SnakeHandler snakeHandler;
         
@@ -29,7 +31,7 @@ namespace SnakeGame
 
         public void SpawnApple()
         {    
-            if(snakeHandler.isObstacleMode==true)
+            if(snakeHandler.isObstacleMode)
             {
                 do
                 {
@@ -39,12 +41,11 @@ namespace SnakeGame
                     } while (!PreventSpawnOverlap(foodGridPos));
                 } while (snakeHandler.GetFullSnakeGridPosList().IndexOf(foodGridPos) != -1);
             }
-            else if(snakeHandler.isObstacleMode==false)
+            else if(!snakeHandler.isObstacleMode)
             {
                 do
                 {
                     foodGridPos = new Vector2(Random.Range(1, width - 1), Random.Range(1, height - 1));
-
                 } while (snakeHandler.GetFullSnakeGridPosList().IndexOf(foodGridPos) != -1);
             }
            
@@ -53,6 +54,31 @@ namespace SnakeGame
             foodGameObject = GameObject.Instantiate(GameAssets.i.foodSprite[randomPos]);
             
             foodGameObject.transform.position = new Vector3(foodGridPos.x,foodGridPos.y);
+        }
+
+        public void SpawnInvincibleApple()
+        {
+            if (snakeHandler.isObstacleMode)
+            {
+                do
+                {
+                    do
+                    {
+                        invincibleApplePos = new Vector2(Random.Range(1, width - 1), Random.Range(1, height - 1));
+                    } while (!PreventSpawnOverlap(invincibleApplePos));
+                } while (snakeHandler.GetFullSnakeGridPosList().IndexOf(invincibleApplePos) != -1);
+            }
+            else if (!snakeHandler.isObstacleMode)
+            {
+                do
+                {
+                    invincibleApplePos = new Vector2(Random.Range(1, width - 1), Random.Range(1, height - 1));
+
+                } while (snakeHandler.GetFullSnakeGridPosList().IndexOf(invincibleApplePos) != -1);
+            }
+            InvincibleAppleGameObject = GameObject.Instantiate(GameAssets.i.InvincibleApple);
+
+            InvincibleAppleGameObject.transform.position = new Vector3(invincibleApplePos.x, invincibleApplePos.y);
         }
 
         bool PreventSpawnOverlap(Vector2 spawnPos)
@@ -67,6 +93,8 @@ namespace SnakeGame
             }
             return true;
         }
+        
+        
         public bool DoesSnakeAteFood(Vector2 SnakeGridPos)
         {
             if (SnakeGridPos == foodGridPos)
@@ -100,10 +128,32 @@ namespace SnakeGame
             else
                 return false;
         }
+        public bool DoesSnakeAteInvincibleApple(Vector2 SnakePos)
+        {
+            if (SnakePos == invincibleApplePos)
+            {
+
+                SoundManager.PlaySound(SoundManager.Sound.SnakeEatInvincibleApple);
+                GameAssets.i.snakeEatInvincibleApple.Play();
+
+                Object.Destroy(InvincibleAppleGameObject);
+                invincibleApplePos = new Vector2(-5,-5);
+
+               
+
+                return true;
+
+            }
+            return false;
+        }
+       
+        
         public void IncreaseScoreAfterFoodReach(string nameOfConsumable)
         {
             snakeHandler.ScoreCounter(nameOfConsumable);
         }
+
+
 
         public Vector2 ValidateGridPositionForFreeMode(Vector2 snakePos)
         {

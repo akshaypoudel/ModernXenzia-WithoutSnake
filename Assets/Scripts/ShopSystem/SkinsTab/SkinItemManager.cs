@@ -20,6 +20,7 @@ public class SkinItemManager : MonoBehaviour
     private List<GameObject> PurchaseButton;
     private List<GameObject> SelectButtons;
     private List<GameObject> SelectedButtons;
+    private List<GameObject> FruitsIcon;
 
     public int buttonIndexInStageTemplateGameObject;
 
@@ -28,11 +29,11 @@ public class SkinItemManager : MonoBehaviour
 
     PlayerPrefsSaveSystem saveSystem = new PlayerPrefsSaveSystem();
 
-    private string jsonFileName = "CMD_DEBUG_LOG_9954a9.json";
+    private string jsonFileName = "CMD_LOG-CONTROL_754a7.json";
     private string fruitsEncrypted = "FruitsEncrypted";
     private string fruitsPrefs = "Fruits";
    // private string isSaved = "isSkinSaved";
-    private string indexOfMat = "indexOfSkins";
+    private string indexOfMat = "indexOfSkins1";
     private string persistantDataPath = "";
 
     public SkyItemManager skyItemManager;
@@ -59,7 +60,10 @@ public class SkinItemManager : MonoBehaviour
         }
         LoadPanel();
         CheckPurchasable();
-        LoadButtonState();
+        if (File.Exists(persistantDataPath + jsonFileName))
+        {
+            LoadButtonState();
+        }
 
 
         if (PlayerPrefs.HasKey(indexOfMat))
@@ -77,12 +81,14 @@ public class SkinItemManager : MonoBehaviour
         if (PurchaseButton == null) PurchaseButton = new List<GameObject>();
         if (SelectButtons == null) SelectButtons = new List<GameObject>();
         if (SelectedButtons == null) SelectedButtons = new List<GameObject>();
+        if(FruitsIcon == null) FruitsIcon = new List<GameObject>();
 
         for (int i = 0; i < skinPanelsGameObjects.Length; i++)
         {
             PurchaseButton.Add(skinPanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject).gameObject);
             SelectButtons.Add(skinPanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject + 1).gameObject);
             SelectedButtons.Add(skinPanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject + 2).gameObject);
+            FruitsIcon.Add(skinPanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject + 3).GetChild(0).gameObject);
         }
     }
     public void LoadPanel()
@@ -117,6 +123,8 @@ public class SkinItemManager : MonoBehaviour
     {
         if (coins >= skinItemSO[buttonNumber].baseCost)
         {
+            skinPanelsGameObjects[buttonNumber].transform.GetChild(3).GetChild(0).gameObject.SetActive(false);
+
             coins = coins - skinItemSO[buttonNumber].baseCost;
             coinUI.text = coins.ToString();
             int tempCoin = skinItemSO[buttonNumber].baseCost;
@@ -149,7 +157,7 @@ public class SkinItemManager : MonoBehaviour
             }
             SelectedButtons[buttonNumber].SetActive(true);
             PlayerPrefs.SetInt(indexOfMat, buttonNumber);
-
+            
 
         }
     }
@@ -159,7 +167,8 @@ public class SkinItemManager : MonoBehaviour
         bool isNotActive = false;
         PurchaseButton[buttonNumber].SetActive(isNotActive);
         SelectButtons[buttonNumber].SetActive(isActive);
-        skinTemplates[buttonNumber].TitleText.text = skinItemSO[buttonNumber].Name;
+        skinTemplates[buttonNumber].UnlockedObjectText.text = skinItemSO[buttonNumber].Name;
+        FruitsIcon[buttonNumber].SetActive(isNotActive);
         SaveButtonState(buttonNumber, skinItemSO[buttonNumber].Name, isActive, isNotActive);
     }
     public void SaveButtonState(int buttonNumber, string nameOfObject, bool isActive, bool isNotActive)
@@ -168,6 +177,7 @@ public class SkinItemManager : MonoBehaviour
         playerdata.buttonNumber = buttonNumber;
         playerdata.dataToSetActive = isActive;
         playerdata.dataToSetInactive = isNotActive;
+        playerdata.removeFruitIcon = isNotActive;
         playerdata.nameOfUnlockedObject = nameOfObject;
         SaveEncryptedData(playerdata);
 
@@ -185,6 +195,7 @@ public class SkinItemManager : MonoBehaviour
         playerdataencrypt.No = encrypt1;
         playerdataencrypt.yieldd = playerdata.dataToSetActive;
         playerdataencrypt.NetworkBuild = playerdata.dataToSetInactive;
+        playerdataencrypt.TIO00_UGG = playerdata.dataToSetInactive;
         playerdataencrypt.name = encrypt4;
         playerDataNumber.NetworkingCommand.Add(playerdataencrypt);
         saveSystemWithJson.SavePlayerDataNumber(playerDataNumber, jsonFileName);
@@ -193,24 +204,24 @@ public class SkinItemManager : MonoBehaviour
     public void LoadButtonState()
     {
         PlayerDataEncrypted playerdata = new PlayerDataEncrypted();
-        if (File.Exists(persistantDataPath + jsonFileName))
+
+        playerDataNumber = saveSystemWithJson.LoadPlayerDataNumber(jsonFileName);
+
+
+        for (int i = 0; i < playerDataNumber.NetworkingCommand.Count; i++)
         {
-            playerDataNumber = saveSystemWithJson.LoadPlayerDataNumber(jsonFileName);
+            playerdata = playerDataNumber.NetworkingCommand[i];
+            int number = int.Parse(RijndaelEncryption.Decrypt(playerdata.No, passwordforsavefile));
+            string data2 = RijndaelEncryption.Decrypt(playerdata.name, passwordforsavefile);
 
 
-            for (int i = 0; i < playerDataNumber.NetworkingCommand.Count; i++)
-            {
-                playerdata = playerDataNumber.NetworkingCommand[i];
-                int number = int.Parse(RijndaelEncryption.Decrypt(playerdata.No, passwordforsavefile));
-                string data2 = RijndaelEncryption.Decrypt(playerdata.name, passwordforsavefile);
+            SelectButtons[number].SetActive(playerdata.yieldd);
+            PurchaseButton[number].SetActive(playerdata.NetworkBuild);
+            FruitsIcon[number].SetActive(playerdata.TIO00_UGG);
+            skinTemplates[number].UnlockedObjectText.text = data2;
 
-
-                SelectButtons[number].SetActive(playerdata.yieldd);
-                PurchaseButton[number].SetActive(playerdata.NetworkBuild);
-                skinTemplates[number].TitleText.text = data2;
-
-            }
         }
+        
 
 
 

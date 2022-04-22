@@ -34,12 +34,7 @@ public class ShopItemManager : MonoBehaviour
 
     void Start()
     {
-        //Debug.Log("Fruits are: "+saveSystem.ReturnDecryptedScore(password,fruitsEncrypted,fruitsPrefs));
         GetCoins();
-        //for(int i=0;i<shopPanelsGameObjects.Length;i++)
-        //{
-        //    shopPanelsGameObjects[i].SetActive(true);
-        //}
         LoadPanel();
         CheckPurchasable();
     }

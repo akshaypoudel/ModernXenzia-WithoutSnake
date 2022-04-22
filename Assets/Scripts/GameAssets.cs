@@ -21,6 +21,8 @@ namespace SnakeGame
         public SoundAudioClip[] soundAudioClipArray;
         public Material[] foodMat;
         public int indexOfBGMaterial;
+        public GameObject InvincibleApple;
+        public ParticleSystem snakeEatInvincibleApple;
         
         [Serializable]
         public class SoundAudioClip

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage7
   m_EditorClassIdentifier: 
-  Price: 450 Fruits
+  Price: 450
   Name: StickyMud
   materialOfObject: {fileID: 2100000, guid: 7ea77b3e49c1d61409582be7e98d0d61, type: 2}
   baseCost: 450

@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/GameScene.unity
     guid: 239316e5ea527c54aa0e54c75b6c6d66
   - enabled: 1
-    path: Assets/Scenes/HardModeGameScene.unity
+    path: Assets/Scenes/ObstacleMode.unity
     guid: e26d0751582d363439d1368a1fe15b24
+  - enabled: 1
+    path: Assets/Scenes/HardMode.unity
+    guid: 95fb60de86860334d8527e80750b25b8
   m_configObjects: {}

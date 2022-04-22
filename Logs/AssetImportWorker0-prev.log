@@ -1,0 +1,167 @@
+Using pre-set license
+Built from '2021.1/staging' branch; Version is '2021.1.6f1 (c0fade0cc7e9) revision 12647134'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Home Single Language; OS build 22000.613; Version 2009; 64bit' Language: 'en' Physical Memory: 7886 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2021.1.6f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+E:/UNITY PROJECTS/Snake Game
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+56632
+Successfully changed project path to: E:/UNITY PROJECTS/Snake Game
+E:/UNITY PROJECTS/Snake Game
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 76.06 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2021.1.6f1 (c0fade0cc7e9)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.1.6f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path E:/UNITY PROJECTS/Snake Game/Assets
+GfxDevice: creating device client; threaded=0; jobified=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) Iris(R) Xe Graphics (ID=0x9a49)
+    Vendor:   Intel
+    VRAM:     3943 MB
+    Driver:   30.0.101.1631
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.1.6f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.1.6f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.1.6f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56396
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.1.6f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003166 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 48.11 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  4.574 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.012804 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 46.44 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.811 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 0.91 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1971 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 182.2 MB.
+System memory in use after: 182.2 MB.
+
+Unloading 92 unused Assets to reduce memory usage. Loaded Objects now: 2399.
+Total: 2.191700 ms (FindLiveObjects: 0.124700 ms CreateObjectMapping: 0.041500 ms MarkObjects: 1.874200 ms  DeleteObjects: 0.142400 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/Scenes/MenuScene.unity
+  artifactKey: Guid(cf56916d09773fa48b8f12289e388cf6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/MenuScene.unity using Guid(cf56916d09773fa48b8f12289e388cf6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c549f450ef4bc42fe9765cdba9600352') in 0.014687 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 14.936177 seconds.
+  path: Assets/DinV/Dynamic Space Background/Sprites/Nebula Aqua-Pink.png
+  artifactKey: Guid(d9b31ebd60af68c469212c1a9f513e74) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/DinV/Dynamic Space Background/Sprites/Nebula Aqua-Pink.png using Guid(d9b31ebd60af68c469212c1a9f513e74) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8f7ca3ed79b23930f7f3d260bb6e4681') in 0.097136 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 10.241183 seconds.
+  path: Assets/Audios/cartoon-jump-6462.mp3
+  artifactKey: Guid(21a08fd8cbaac5a4bbc4a684aa987275) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/cartoon-jump-6462.mp3 using Guid(21a08fd8cbaac5a4bbc4a684aa987275) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '55d8529f95561f0b97f3316423462084') in 0.025431 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 4.658139 seconds.
+  path: Assets/Audios/hit.wav
+  artifactKey: Guid(6f316f9f990c6c14c8298dcfd079a59b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/hit.wav using Guid(6f316f9f990c6c14c8298dcfd079a59b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c81b92208ca1bcfb2592d125634334a2') in 0.020537 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 2.438709 seconds.
+  path: Assets/Audios/Jelly Collec.wav
+  artifactKey: Guid(ecfa1f74f3ffda8449d4b76b5b7d31f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/Jelly Collec.wav using Guid(ecfa1f74f3ffda8449d4b76b5b7d31f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'abfabb41f25a86602f2e77052364c6ab') in 0.011273 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 3.897996 seconds.
+  path: Assets/Audios/life-of-a-wandering-wizard-15549.mp3
+  artifactKey: Guid(5fa6faefb5f9d264c99b8a440ce4f43e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/life-of-a-wandering-wizard-15549.mp3 using Guid(5fa6faefb5f9d264c99b8a440ce4f43e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c82a99127f0ed72702a1f74716379526') in 0.011223 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 3.694980 seconds.
+  path: Assets/Audios/success-1-6297.mp3
+  artifactKey: Guid(830146d0a63776549a563c58917b79ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/success-1-6297.mp3 using Guid(830146d0a63776549a563c58917b79ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c92e7645a68eae6553323fca06b15642') in 0.010726 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 9.497301 seconds.
+  path: Assets/Audios/UI SOUND.wav
+  artifactKey: Guid(a22b8c429f521429084d616c68dda19a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/UI SOUND.wav using Guid(a22b8c429f521429084d616c68dda19a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7244469e43605eb3c0744e772dbd8cf7') in 0.012071 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 3.040692 seconds.
+  path: Assets/Audios/whoosh-6316.mp3
+  artifactKey: Guid(6865b0f75989916429ae3a94ab82fc06) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/whoosh-6316.mp3 using Guid(6865b0f75989916429ae3a94ab82fc06) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1d0c036bd11ceb5f451040ac3108c595') in 0.013709 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 4.499199 seconds.
+  path: Assets/Audios/vodevil-15550.mp3
+  artifactKey: Guid(d9a45d30a29cf3b4fbb2aafa15a2e5d2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/vodevil-15550.mp3 using Guid(d9a45d30a29cf3b4fbb2aafa15a2e5d2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '44408db107d32694c3dc3bf7515d1bd2') in 0.010356 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 250.449403 seconds.
+  path: Assets/Audios/snake-hissing-6092 (1).mp3
+  artifactKey: Guid(f6c39a749608e984d80cec1cc6c20ece) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Audios/snake-hissing-6092 (1).mp3 using Guid(f6c39a749608e984d80cec1cc6c20ece) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '89a31f82d6a3fa7f43b22fcf3d809133') in 0.014156 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 4900.773505 seconds.
+  path: Assets/Scenes/GameScene.unity
+  artifactKey: Guid(239316e5ea527c54aa0e54c75b6c6d66) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/GameScene.unity using Guid(239316e5ea527c54aa0e54c75b6c6d66) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5b26b33518b49e33c20e243d318cc015') in 0.053026 seconds 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.068017 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.92 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.020 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.98 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1951 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 186.5 MB.
+System memory in use after: 186.5 MB.
+
+Unloading 87 unused Assets to reduce memory usage. Loaded Objects now: 2428.
+Total: 3.026800 ms (FindLiveObjects: 0.138500 ms CreateObjectMapping: 0.040700 ms MarkObjects: 2.686900 ms  DeleteObjects: 0.159100 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 16382.610803 seconds.
+  path: Assets/prefabs/stageItemTemplate.prefab
+  artifactKey: Guid(8c5b276a924e2434888ef2a0d96c5e2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/prefabs/stageItemTemplate.prefab using Guid(8c5b276a924e2434888ef2a0d96c5e2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b7dd46ad656bb15f8b5949ccd0f5ffcc') in 0.145115 seconds 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file

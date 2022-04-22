@@ -16,7 +16,8 @@ namespace SnakeGame
             ButtonOver,
             DirectionChanging,
             SnakeEat,
-            SnakeEatJelly
+            SnakeEatJelly,
+            SnakeEatInvincibleApple
         }
 
         public static void PlaySound(Sound sound)

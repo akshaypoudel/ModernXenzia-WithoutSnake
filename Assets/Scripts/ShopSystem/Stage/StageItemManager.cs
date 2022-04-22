@@ -19,9 +19,12 @@ namespace SnakeGame.ShopSystem
         public GameObject[] stagePanelsGameObjects;
         public StageTemplate[] stageTemplates;
         public Sprite[] stageBGImage;
+
+
         private List<GameObject> PurchaseButton;
         private List<GameObject> SelectButtons;
         private List<GameObject> SelectedButtons;
+        private List<GameObject> FruitIcon;
 
         public int buttonIndexInStageTemplateGameObject;
 
@@ -29,11 +32,11 @@ namespace SnakeGame.ShopSystem
         [SerializeField] private string passwordforsavefile;
         PlayerPrefsSaveSystem saveSystem = new PlayerPrefsSaveSystem();
 
-        private string jsonFileName = "LOG_UNIT_GRADLE_ID_99gh68tt32.json";
+        private string jsonFileName = "LOG_UNIT_GRADLE_ID_99gh68tt33.json";
         private string fruitsEncrypted = "FruitsEncrypted";
         private string fruitsPrefs = "Fruits";
         //private string isSaved= "isStageSaved";
-        private string indexOfMat = "indexOfMaterial";
+        private string indexOfMat = "indexOfMaterial1";
         private string persistantDataPath="";
 
         public SkinItemManager skinItemManager;
@@ -63,8 +66,10 @@ namespace SnakeGame.ShopSystem
             }
             LoadPanel();
             CheckPurchasable();
-            LoadButtonState();
-
+            if (File.Exists(persistantDataPath + jsonFileName))
+            {
+                LoadButtonState();
+            }
 
             if (PlayerPrefs.HasKey(indexOfMat))
                 SetSelectedButtonActive();
@@ -81,12 +86,14 @@ namespace SnakeGame.ShopSystem
             if (PurchaseButton == null) PurchaseButton = new List<GameObject>();
             if (SelectButtons == null) SelectButtons = new List<GameObject>();
             if (SelectedButtons == null) SelectedButtons = new List<GameObject>();
+            if (FruitIcon == null) FruitIcon = new List<GameObject>();
 
             for (int i = 0; i < stagePanelsGameObjects.Length; i++)
             {
                 PurchaseButton.Add(stagePanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject).gameObject);
                 SelectButtons.Add(stagePanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject+1).gameObject);
                 SelectedButtons.Add(stagePanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject+2).gameObject);
+                FruitIcon.Add(stagePanelsGameObjects[i].transform.GetChild(buttonIndexInStageTemplateGameObject+3).gameObject);
             }
         }
 
@@ -122,11 +129,13 @@ namespace SnakeGame.ShopSystem
         {
             if (coins >= stageItemSO[buttonNumber].baseCost)
             {
+                stagePanelsGameObjects[buttonNumber].transform.GetChild(3).gameObject.SetActive(false);
                 coins = coins - stageItemSO[buttonNumber].baseCost;
                 coinUI.text = coins.ToString();
                 int tempCoin = stageItemSO[buttonNumber].baseCost;
                 saveSystem.EncryptPrefsNegative(tempCoin, password,fruitsEncrypted,fruitsPrefs);
                 CheckPurchasable();
+                Select(buttonNumber);
 
                 SkyItemManager.GetCoins();
                 SkyItemManager.CheckPurchasable();
@@ -134,7 +143,6 @@ namespace SnakeGame.ShopSystem
                 skinItemManager.GetCoins();
                 skinItemManager.CheckPurchasable();
 
-                Select(buttonNumber);
             }
         }
         private void SetSelectedButtonActive()
@@ -155,8 +163,6 @@ namespace SnakeGame.ShopSystem
                 }
                 SelectedButtons[buttonNumber].SetActive(true);
                 PlayerPrefs.SetInt(indexOfMat, buttonNumber);
-                
-                
             }
         }
         public void Select(int buttonNumber)
@@ -165,7 +171,8 @@ namespace SnakeGame.ShopSystem
             bool isNotActive = false;
             PurchaseButton[buttonNumber].SetActive(isNotActive);
             SelectButtons[buttonNumber].SetActive(isActive);
-            stageTemplates[buttonNumber].TitleText.text = stageItemSO[buttonNumber].Name;
+            stageTemplates[buttonNumber].UnlockedObjectText.text = stageItemSO[buttonNumber].Name;
+            FruitIcon[buttonNumber].SetActive(isNotActive);
             SaveButtonState(buttonNumber, stageItemSO[buttonNumber].Name, isActive, isNotActive);
         }
         public void SaveButtonState(int buttonNumber, string nameOfObject, bool isActive, bool isNotActive)
@@ -174,10 +181,10 @@ namespace SnakeGame.ShopSystem
             playerdata.buttonNumber = buttonNumber;
             playerdata.dataToSetActive = isActive;
             playerdata.dataToSetInactive = isNotActive;
+            playerdata.removeFruitIcon = isNotActive;
             playerdata.nameOfUnlockedObject = nameOfObject;
             SaveEncryptedData(playerdata);
-            //playerDataNumber.NetworkingCommand.Add(playerdata);
-            //saveSystemWithJson.SavePlayerDataNumber(playerDataNumber,(jsonFileName));
+           
         }
         private void SaveEncryptedData(PlayerData playerdata)
         {
@@ -189,31 +196,32 @@ namespace SnakeGame.ShopSystem
             playerdataencrypt.No = encrypt1;
             playerdataencrypt.yieldd = playerdata.dataToSetActive;
             playerdataencrypt.NetworkBuild = playerdata.dataToSetInactive;
+            playerdataencrypt.TIO00_UGG = playerdata.dataToSetInactive;
             playerdataencrypt.name = encrypt4;
             playerDataNumber.NetworkingCommand.Add(playerdataencrypt);
             saveSystemWithJson.SavePlayerDataNumber(playerDataNumber,jsonFileName);
-
         }
         public void LoadButtonState()
         {
             PlayerDataEncrypted playerdata = new PlayerDataEncrypted();
-            if (File.Exists(persistantDataPath + jsonFileName))
+            playerDataNumber = saveSystemWithJson.LoadPlayerDataNumber(jsonFileName);
+
+
+            for (int i = 0; i < playerDataNumber.NetworkingCommand.Count; i++)
             {
-                playerDataNumber = saveSystemWithJson.LoadPlayerDataNumber(jsonFileName);
 
-
-                for (int i = 0; i < playerDataNumber.NetworkingCommand.Count; i++)
-                {
-                    playerdata = playerDataNumber.NetworkingCommand[i];
-                    int number = int.Parse(RijndaelEncryption.Decrypt(playerdata.No, passwordforsavefile));
-                    string data2 = RijndaelEncryption.Decrypt(playerdata.name, passwordforsavefile);
+                playerdata = playerDataNumber.NetworkingCommand[i];
+                //decrypting the buttonNumber of the object
+                int number = int.Parse(RijndaelEncryption.Decrypt(playerdata.No, passwordforsavefile));
+                //decrypting the name of the unlocked object
+                string data2 = RijndaelEncryption.Decrypt(playerdata.name, passwordforsavefile);
                     
 
-                    SelectButtons[number].SetActive(playerdata.yieldd);
-                    PurchaseButton[number].SetActive(playerdata.NetworkBuild);
-                    stageTemplates[number].TitleText.text = data2 ;
+                SelectButtons[number].SetActive(playerdata.yieldd);
+                PurchaseButton[number].SetActive(playerdata.NetworkBuild);
+                FruitIcon[number].SetActive(playerdata.TIO00_UGG);
+                stageTemplates[number].UnlockedObjectText.text = data2 ;
 
-                }
             }
             
 

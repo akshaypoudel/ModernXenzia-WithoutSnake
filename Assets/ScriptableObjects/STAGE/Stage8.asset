@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage8
   m_EditorClassIdentifier: 
-  Price: 500 Fruits
+  Price: 500
   Name: MagicBrass
   materialOfObject: {fileID: 2100000, guid: 78f6c3f1d47eef84f9ee5e607fad4c0c, type: 2}
   baseCost: 500

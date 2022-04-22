@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfa6ee17740fa8b4e8f885dfac88d40c, type: 3}
   m_Name: SkinMenu 5
   m_EditorClassIdentifier: 
-  Price: 750 Fruits
+  Price: 750
   Name: MagicFox
   materialOfObject: {fileID: 0}
   baseCost: 750

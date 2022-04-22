@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fe31399746ea7b4d888bf417317dbfb, type: 3}
   m_Name: 1000 Fruits
   m_EditorClassIdentifier: 
-  Title: 25 Jelly's
-  Description: Buy 100 Fruits
+  Title: 25
+  Description: Buy 100
   bgImage: {fileID: 21300000, guid: 912cf8b3387902f47b6b566887254313, type: 3}
   fruitsValue: 100
   JellyCost: 25

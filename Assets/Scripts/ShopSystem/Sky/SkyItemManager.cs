@@ -16,9 +16,13 @@ public class SkyItemManager : MonoBehaviour
     public GameObject[] skyPanelsGameObjects;
     public SkyTemplate[] skyTemplates;
     public Sprite[] skyBGImage;
+
+
     private List<GameObject> PurchaseButton;
     private List<GameObject> SelectButtons;
     private List<GameObject> SelectedButtons;
+    private List<GameObject> FruitsIcon;
+
     PlayerDataNumber playerDataNumber;
     SaveLoadJSONData saveSystemWithJson;
 
@@ -34,8 +38,8 @@ public class SkyItemManager : MonoBehaviour
     //private string isSaved="isSkySaved";
     private string fruitsEncrypted = "FruitsEncrypted";
     private string fruitsPrefs = "Fruits";
-    private string indexOfSkyBox = "indexOfSkyBoxes";
-    private string jsonFileName = "FPdr444gdT-995.json";
+    private string indexOfSkyBox = "indexOfSkyBoxes1";
+    private string jsonFileName = "FPdr994YYLT-98.json";
     private string persistantDataPath = "";
     private void Awake()
     {
@@ -55,12 +59,15 @@ public class SkyItemManager : MonoBehaviour
         }
         LoadPanel();
         CheckPurchasable();
-        LoadButtonState();
+        if (File.Exists(persistantDataPath + jsonFileName))
+        {
+            LoadButtonState();
+        }
 
 
 
         if (PlayerPrefs.HasKey(indexOfSkyBox))
-            SetSelectedButtonActive();
+            SetSelectedButtonActive(); //this function will set the selected button active
         else
             PlayerPrefs.SetInt(indexOfSkyBox, 0);
     }
@@ -75,12 +82,14 @@ public class SkyItemManager : MonoBehaviour
         if (PurchaseButton == null) PurchaseButton = new List<GameObject>();
         if (SelectButtons == null) SelectButtons = new List<GameObject>();
         if (SelectedButtons == null) SelectedButtons = new List<GameObject>();
+        if (FruitsIcon == null) FruitsIcon = new List<GameObject>();
 
         for (int i = 0; i < skyPanelsGameObjects.Length; i++)
         {
             PurchaseButton.Add(skyPanelsGameObjects[i].transform.GetChild(buttonIndexInskyTemplateGameObject).gameObject);
             SelectButtons.Add(skyPanelsGameObjects[i].transform.GetChild(buttonIndexInskyTemplateGameObject + 1).gameObject);
             SelectedButtons.Add(skyPanelsGameObjects[i].transform.GetChild(buttonIndexInskyTemplateGameObject + 2).gameObject);
+            FruitsIcon.Add(skyPanelsGameObjects[i].transform.GetChild(buttonIndexInskyTemplateGameObject + 3).gameObject);
         }
     }
     private void LoadPanel()
@@ -115,6 +124,7 @@ public class SkyItemManager : MonoBehaviour
     {
         if (coins >= skyItemSO[buttonNumber].baseCost)
         {
+            skyPanelsGameObjects[buttonNumber].transform.GetChild(3).gameObject.SetActive(false);
             coins = coins - skyItemSO[buttonNumber].baseCost;
             coinUI.text = coins.ToString();
             int tempCoin = skyItemSO[buttonNumber].baseCost;
@@ -156,26 +166,19 @@ public class SkyItemManager : MonoBehaviour
         bool isNotActive = false;
         PurchaseButton[buttonNumber].SetActive(isNotActive);
         SelectButtons[buttonNumber].SetActive(isActive);
-        skyTemplates[buttonNumber].TitleText.text = skyItemSO[buttonNumber].Name;
+        skyTemplates[buttonNumber].UnlockedObjectText.text = skyItemSO[buttonNumber].Name;
         
         SaveButtonState(buttonNumber,skyItemSO[buttonNumber].Name,isActive,isNotActive);
     }
     public void SaveButtonState(int buttonNumber, string nameOfObject, bool isActive, bool isNotActive)
     {
-        //PlayerPrefs.SetString(isSaved, "Saved");
         PlayerData playerdata = new PlayerData();
         playerdata.buttonNumber = buttonNumber;
         playerdata.dataToSetActive = isActive;
         playerdata.dataToSetInactive = isNotActive;
+        playerdata.removeFruitIcon = isNotActive;
         playerdata.nameOfUnlockedObject = nameOfObject;
         SaveEncryptedData(playerdata);
-        //playerDataNumber.buttonNumber = buttonNumber;
-        //playerDataNumber.buttonNumberList.Add(buttonNumber);
-        //playerDataNumber.playerDataList.Add(playerdata);
-
-
-        // saveSystemWithJson.SaveData(playerdata,(buttonNumber+".json"));
-        //saveSystemWithJson.SavePlayerDataNumber(playerDataNumber, (jsonFileName));
     }
     private void SaveEncryptedData(PlayerData playerdata)
     {
@@ -187,34 +190,32 @@ public class SkyItemManager : MonoBehaviour
         playerdataencrypt.No = encrypt1;
         playerdataencrypt.yieldd = playerdata.dataToSetActive;
         playerdataencrypt.NetworkBuild = playerdata.dataToSetInactive;
+        playerdataencrypt.TIO00_UGG = playerdata.dataToSetInactive;
         playerdataencrypt.name = encrypt4;
         playerDataNumber.NetworkingCommand.Add(playerdataencrypt);
         saveSystemWithJson.SavePlayerDataNumber(playerDataNumber, jsonFileName);
+    }
+    public void LoadButtonState()
+    {
+
+        PlayerDataEncrypted playerdata = new PlayerDataEncrypted();
+        playerDataNumber = saveSystemWithJson.LoadPlayerDataNumber(jsonFileName);
+
+        for (int i = 0; i < playerDataNumber.NetworkingCommand.Count; i++)
+        {
+            //playerdata = saveSystemWithJson.LoadData((playerDataNumber.buttonNumberList[i]+".json"));
+            playerdata = playerDataNumber.NetworkingCommand[i];
+            int number = int.Parse(RijndaelEncryption.Decrypt(playerdata.No, passwordforsavefile));
+            string data2 = RijndaelEncryption.Decrypt(playerdata.name, passwordforsavefile);
+
+
+            SelectButtons[number].SetActive(playerdata.yieldd);
+            PurchaseButton[number].SetActive(playerdata.NetworkBuild);
+            FruitsIcon[number].SetActive(playerdata.TIO00_UGG);
+
+            skyTemplates[number].UnlockedObjectText.text = data2;
+        }
+
 
     }
-      public void LoadButtonState()
-      {
-
-          PlayerDataEncrypted playerdata = new PlayerDataEncrypted();
-          if(File.Exists(persistantDataPath+jsonFileName))
-          {
-
-              playerDataNumber = saveSystemWithJson.LoadPlayerDataNumber(jsonFileName);
-
-              for (int i = 0; i < playerDataNumber.NetworkingCommand.Count; i++)
-              {
-                  //playerdata = saveSystemWithJson.LoadData((playerDataNumber.buttonNumberList[i]+".json"));
-                    playerdata = playerDataNumber.NetworkingCommand[i];
-                    int number = int.Parse(RijndaelEncryption.Decrypt(playerdata.No, passwordforsavefile));
-                    string data2 = RijndaelEncryption.Decrypt(playerdata.name, passwordforsavefile);
-
-
-                    SelectButtons[number].SetActive(playerdata.yieldd);
-                    PurchaseButton[number].SetActive(playerdata.NetworkBuild);
-                    skyTemplates[number].TitleText.text = data2;
-              }
-          }
-
-
-      }
 }

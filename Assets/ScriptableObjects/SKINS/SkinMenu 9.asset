@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfa6ee17740fa8b4e8f885dfac88d40c, type: 3}
   m_Name: SkinMenu 9
   m_EditorClassIdentifier: 
-  Price: 1500 Fruits
+  Price: 1500
   Name: MagicDeer
   materialOfObject: {fileID: 0}
   baseCost: 1500

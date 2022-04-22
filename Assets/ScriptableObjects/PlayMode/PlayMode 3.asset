@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383aca4e4c02dcd4482a7c8830c1cfe1, type: 3}
   m_Name: PlayMode 3
   m_EditorClassIdentifier: 
-  Price: Coming Soon!!
+  Price: Hard Mode
   baseCost: 0

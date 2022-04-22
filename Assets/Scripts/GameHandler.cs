@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,18 +18,15 @@ namespace SnakeGame
         [SerializeField] private SnakeHandler snakeHandler;
         public GameObject BG;
         private SpawnFood spawnFood1;
-        private string indexOfMat = "indexOfMaterial";
-        private string indexOfSkyBox = "indexOfSkyBoxes";
-        private string indexOfSkin = "indexOfSkins";
+        private string indexOfMat = "indexOfMaterial1";
+        private string indexOfSkyBox = "indexOfSkyBoxes1";
+        private string indexOfSkin = "indexOfSkins1";
         private string controls = "WhichControls";
 
 
 
         private void Start()
         {
-            // if (!PlayerPrefs.HasKey("completedlevelcount"))
-            //     BackGroundSelection.LoadGame();
-
             spawnFood1 = new SpawnFood(spawnPosX,spawnPosY);
 
             snakeHandler.Setup(spawnFood1);

@@ -6,6 +6,7 @@ public class PlayerData
     public int buttonNumber;
     public bool dataToSetActive;
     public bool dataToSetInactive;
+    public bool removeFruitIcon;
    
     public string nameOfUnlockedObject;
 }
@@ -19,8 +20,11 @@ public class PlayerDataNumber
 [System.Serializable]
 public class PlayerDataEncrypted
 {
-    public string No;
-    public bool yieldd;
-    public bool NetworkBuild;
-    public string name;
+    public string No; //button number
+    public bool yieldd; //button to set active
+    public bool NetworkBuild; //button to set inactive
+    
+    public bool TIO00_UGG; //variable for removing fruit icon after purchasing
+
+    public string name; //name of object
 }

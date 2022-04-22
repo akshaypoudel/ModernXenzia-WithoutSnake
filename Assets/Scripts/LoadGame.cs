@@ -21,12 +21,12 @@ namespace SnakeGame
         
         PlayerPrefsSaveSystem saveSystem=new PlayerPrefsSaveSystem();
 
-        private void Update()
+       /* private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
                 Time.timeScale = 0f;          
         }
-
+       */
         public void LoadCurrentScene()
         {
             Time.timeScale = 1f;

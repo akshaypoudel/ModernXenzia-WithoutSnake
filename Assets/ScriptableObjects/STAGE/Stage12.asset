@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage12
   m_EditorClassIdentifier: 
-  Price: 1350 Fruits
+  Price: 1350
   Name: RoundWindow
   materialOfObject: {fileID: 2100000, guid: 378426c27b3a38f4f9e38126b22973fc, type: 2}
   baseCost: 1350

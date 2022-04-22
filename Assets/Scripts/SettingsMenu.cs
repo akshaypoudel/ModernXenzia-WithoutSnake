@@ -13,8 +13,8 @@ public class SettingsMenu : MonoBehaviour
     public Slider MusicSlider;
     public Slider SFXSlider;
 
-    public GameObject vibrationDropDownMenu;
     private GameObject BGAudioGameObject;
+    public GameObject vibrationDropDownMenu;
     //public GameObject Controls;
 
     public AudioSource BackGroundAudioSource;

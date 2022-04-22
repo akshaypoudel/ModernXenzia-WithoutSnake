@@ -8,45 +8,39 @@ using TMPro;
 
 public class AdManager : MonoBehaviour
 {
-    //public GameObject Text;
-    [HideInInspector] public BannerView bannerAd;
     [HideInInspector]public InterstitialAd interstitial;
     [HideInInspector]public RewardedAd rewardedAd;
     [HideInInspector] public RewardedAd rewardedAdForFruits;
     PlayerPrefsSaveSystem saveSystem = new PlayerPrefsSaveSystem();
     public TMP_Text fruitstext;
+    public int fruitRewardAfterWatchingAD;
+    public int welcomeBonusFruitCount;
+    private string bonusClaimedPrefs = "isBonusClaimed";
 
     public GameObject AdButton;
     public GameObject FruitsGainedWindow;
+    public GameObject WelcomeBonusWindow;
+    public GameObject welcomeBonusButton;
 
     public DisableBGComponents bgDisable;
     public StageItemManager stageItemManager;
     public SkyItemManager skyItemManager;
     public SkinItemManager skinItemManager;
 
+
+
     private string fruitsEncrypted = "FruitsEncrypted";
     private string fruitsPrefs = "Fruits";
     [SerializeField]private string password;
 
 
-    /*string bannerAdId = "";
-    string interestialAdId = "";
-    string rewardAdIdForLives = "";
-    string rewardAdIdForFruits = "";*/
-#if UNITY_EDITOR
-        private string bannerAdId = "ca-app-pub-3940256099942544/6300978111";
-        private string interestialAdId = "ca-app-pub-3940256099942544/1033173712";
-        private string rewardAdIdForLives = "ca-app-pub-3940256099942544/5224354917";
-        private string rewardAdIdForFruits = "ca-app-pub-3940256099942544/5224354917";
-#elif UNITY_ANDROID
-        private string bannerAdId = "ca-app-pub-6957919137987763/5739875283";
-        private string interestialAdId="ca-app-pub-6957919137987763/9391523296";
-        private string rewardAdIdForLives="ca-app-pub-6957919137987763/7352339859";
-        private string rewardAdIdForFruits="ca-app-pub-6957919137987763/3800285260";
-#endif
+   /* private string interestialAdId = "ca-app-pub-6957919137987763/9391523296";
+    private string rewardAdIdForLives = "ca-app-pub-6957919137987763/7352339859";
+    private string rewardAdIdForFruits = "ca-app-pub-6957919137987763/3800285260";*/
 
-    //public RectTransform UIObject;
-    //string appId = "ca-app-pub-6957919137987763~9486511194";
+    private string interestialAdId = "	ca-app-pub-3940256099942544/1033173712";
+    private string rewardAdIdForLives = "ca-app-pub-3940256099942544/5224354917";
+    private string rewardAdIdForFruits = "ca-app-pub-3940256099942544/5224354917";
 
     public bool isMenuScene;
     public static AdManager instance;
@@ -66,14 +60,13 @@ public class AdManager : MonoBehaviour
     }
     void Start()
     {
-        if(bannerAd != null)
-            bannerAd.Destroy();
         MobileAds.Initialize(HandleInitCompleteAction);
         if(isMenuScene)
         {
             RequestFruitRewardedAD();
+            if(PlayerPrefs.HasKey(bonusClaimedPrefs))
+                welcomeBonusButton.SetActive(false);
         }
-
     }
     public void RequestFruitRewardedAD()
     {
@@ -87,17 +80,17 @@ public class AdManager : MonoBehaviour
 
     private void HandleOnUserEarnedReward(object sender, Reward e)
     {
-        GiveFruitsToUser();
+        GiveFruitsToUser(fruitRewardAfterWatchingAD);
     }
 
     private void HandleOnAdClosed(object sender, EventArgs e)
     {
-        this.RequestBanner();
+        
     }
 
     private void HandleOnAdLoaded(object sender, EventArgs e)
     {
-        this.bannerAd.Destroy();
+
     }
 
     private void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
@@ -112,7 +105,6 @@ public class AdManager : MonoBehaviour
         
         MobileAdsEventExecutor.ExecuteInUpdate(() =>
         {
-            this.RequestBanner();
             this.RequestInterstitial();
             this.RequestRewardedAd();
         });
@@ -123,13 +115,6 @@ public class AdManager : MonoBehaviour
         this.interstitial = new InterstitialAd(interestialAdId);
         AdRequest request = new AdRequest.Builder().Build();
         this.interstitial.LoadAd(request);
-    }
-    public void RequestBanner()
-    {
-        this.bannerAd = new BannerView(bannerAdId,AdSize.SmartBanner,AdPosition.Bottom);
-        AdRequest request = new AdRequest.Builder().Build();
-        this.bannerAd.LoadAd(request);
-        //this.bannerAd.Show();
     }
 
     public void RequestRewardedAd()
@@ -157,16 +142,17 @@ public class AdManager : MonoBehaviour
           //  AdButton.SetActive(false);
     }
 
-    private void GiveFruitsToUser()
+    private void GiveFruitsToUser(int fruitCount)
     {
         int totalFruits = saveSystem.ReturnDecryptedScore(password,fruitsEncrypted,fruitsPrefs);
-        int fruitsToGive = 20;
+        int fruitsToGive = fruitCount;
         int totalFruitAfterRewarding = fruitsToGive + totalFruits;
         fruitstext.text = totalFruitAfterRewarding.ToString();
         fruitstext.text = totalFruitAfterRewarding.ToString();
 
         bgDisable.DisableAllBgComponents();
-        FruitsGainedWindow.SetActive(true);
+        if(fruitCount < 100)
+            FruitsGainedWindow.SetActive(true);
         saveSystem.EncryptPrefsPositive(fruitsToGive,password,fruitsEncrypted,fruitsPrefs);
 
         stageItemManager.GetCoins();
@@ -178,13 +164,21 @@ public class AdManager : MonoBehaviour
         skinItemManager.GetCoins();
         skinItemManager.CheckPurchasable();
 
-        this.RequestFruitRewardedAD();
+        if(fruitCount < 100)
+            this.RequestFruitRewardedAD();
         
     }
     public void SaveAdButtonState()
     {
         PlayerPrefs.SetInt("WatchAD", 1);
     }
+    public void WelcomeBonusClaim()
+    {
+        PlayerPrefs.SetInt(bonusClaimedPrefs, 1);
+        welcomeBonusButton.SetActive(false);
+        WelcomeBonusWindow.SetActive(true);
+        GiveFruitsToUser(welcomeBonusFruitCount);
+    }
     
-
+    
 }
