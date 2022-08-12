@@ -3,9 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
-using GoogleMobileAds.Api;
+using UnityEngine.Advertisements;
 using PhoneVibrator;
-using System;
 
 namespace SnakeGame
 {
@@ -58,15 +57,26 @@ namespace SnakeGame
         public bool isObstacleMode;
         private bool snakeAteInvincibleApple = false;
         private bool canSpawnAnotherInvincibleApple = true;
-        public float overlapSphereRadius = 0.5f;
+        [HideInInspector]public float overlapSphereRadius = 0.8f;
+        private bool invincibleAppleEated = false;
+
+
+        private bool isTimerActive = false;
+        private int startTime = 4;
+        private float currentTime;
+
+        public Slider invincibleTimerSlider;
+        [SerializeField] private float invincibilityTime;
+        private bool stopInvinciblityTimer;
+        private float time;
+
         #endregion
 
         #region Text Mesh Pro References
         [Header("Text Mesh Pro References")]
         public Text fruitsText;
         public Text jellyText;
-        public TMP_Text scoreText;
-        //public TMP_Text HighScoreText;
+        public TMP_Text TimerText;
         #endregion
 
         #region List References
@@ -82,13 +92,14 @@ namespace SnakeGame
         public GameObject PauseButton;
         public GameObject adButton;
         public GameObject buttonControls;
+        public GameObject InvincibilityTimerGameObject;
        [HideInInspector] public Collider2D[] colliders;
         public ParticleSystem invincibleEffect;
 
         #endregion
 
         #region Enumeration Reference
-        private Direction gridMoveDirection;
+            private Direction gridMoveDirection;
         #endregion
 
         #region Vector2 for storing snake position
@@ -107,6 +118,7 @@ namespace SnakeGame
         private SettingsMenu settingsMenu;
         private PlayerPrefsSaveSystem saveSystem = new PlayerPrefsSaveSystem();
         public AdManager admanager;
+        [SerializeField] private InterstitialAds interstitialAds;
         #endregion
 
         #endregion
@@ -136,19 +148,8 @@ namespace SnakeGame
         private void Start()
         {
             UIButtonClick();
-            settingsMenu = FindObjectOfType<SettingsMenu>();
-            isSnakeMoving = false;
-            canWePressButton = true;
-            snakePosition = snakePosAtTheTimeOfSceneLoading;
-            snakeMoveTimer = snakeMoveTimerMax;
-            snakeBodySize = 1;
-            gridMoveDirection = Direction.None;
-            canSpawnAnotherInvincibleApple = true;
-            //Debug.Log(snakeBodySize);
-
-
+            InitializeVariables();
         }
-        //BUTTONS CLICK
         private void UIButtonClick()
         {
             upButton.onClick.AddListener(Up);
@@ -158,17 +159,47 @@ namespace SnakeGame
             leftButton.onClick.AddListener(Left);
             rightButton.onClick.AddListener(Right);
         }
+
+        private void InitializeVariables()
+        {
+            settingsMenu = FindObjectOfType<SettingsMenu>();
+            isSnakeMoving = false;
+            canWePressButton = true;
+            snakePosition = snakePosAtTheTimeOfSceneLoading;
+            snakeMoveTimer = snakeMoveTimerMax;
+            snakeBodySize = 1;
+            gridMoveDirection = Direction.None;
+            canSpawnAnotherInvincibleApple = true;
+            currentTime = startTime;
+            stopInvinciblityTimer = false;
+            invincibleTimerSlider.maxValue = invincibilityTime;
+            invincibleTimerSlider.value = invincibilityTime;
+            time = invincibilityTime;
+        }
+
+
         private void FixedUpdate()
         {
             if (isSnakeMoving)
                 HandleGridMovement();  //function for handling snake position
-                                       //MoveSnake();
         }
 
         private void Update()
         {
+#if UNITY_EDITOR
+            if (canWePressButton)
+                KeyBoardInput();
+#endif
             if (canWePressButton && isTouchControls)
-                 MobileControls(); //Function for handling touch in android phones 
+                 MobileControls();
+
+            if (isTimerActive)
+                Timer();
+
+            if (isInvincible && !stopInvinciblityTimer)
+            {
+                InvinciblityTimer();
+            }
         }
 
         private void KeyBoardInput()
@@ -253,22 +284,12 @@ namespace SnakeGame
                 {
                     snakeMovePosList.RemoveAt(snakeMovePosList.Count - 1);
                 }
-                if (isInvincible == false)
-                    SnakeCollidingWithHisBody();
+                CheckIfSnakeIsInvincibleOrNot();
 
                 SetNewSnakePosition();
                 UpdateSnakeBodyPart();
             }
         }
-
-        private void ValidateSnakePosition()
-        {
-            if (isObstacleMode)
-                snakePosition = spawnFood.ValidateGridPositionForHardMode(snakePosition);
-            else if (!isObstacleMode)
-                snakePosition = spawnFood.ValidateGridPositionForFreeMode(snakePosition);
-        }
-
         private void UpdateSnakePosition()
         {
             if (snakeMovePosList.Count > 0)
@@ -277,30 +298,6 @@ namespace SnakeGame
             }
         }
 
-        private void CheckIfSnakeEatInvincibleApple()
-        {
-            if (canSpawnAnotherInvincibleApple)
-            {
-                spawninvincibleapple();
-
-            }
-            snakeAteInvincibleApple = spawnFood.DoesSnakeAteInvincibleApple(snakePosition);
-            if (snakeAteInvincibleApple)
-            {
-                canSpawnAnotherInvincibleApple = true;
-                StartCoroutine(MakeTheSnakeInvinsibleForShortTime());
-            }
-        }
-        private void CheckIfSnakeEatFood()
-        {
-            snakeAteFood = spawnFood.DoesSnakeAteFood(snakePosition);
-            if (snakeAteFood)
-            {
-                ++snakeBodySize;
-                CreateSnakeBodyPart();
-                IncreaseSnakeSpeed();
-            }
-        }
         private void SetSnakeMovePosition()
         {
             snakeMovePosition1 = new SnakeMovePosition(previousSnakeMovePosition, snakePosition, gridMoveDirection);
@@ -317,6 +314,88 @@ namespace SnakeGame
             snakePosition += gridMoveDirectionVector;
 
         }
+        
+        private void ValidateSnakePosition()
+        {
+            if (isObstacleMode)
+                snakePosition = spawnFood.ValidateGridPositionForHardMode(snakePosition);
+            else if (!isObstacleMode)
+                snakePosition = spawnFood.ValidateGridPositionForFreeMode(snakePosition);
+        }
+        
+        private void CheckIfSnakeEatInvincibleApple()
+        {
+            if (canSpawnAnotherInvincibleApple)
+            {
+                spawninvincibleapple();
+
+            }
+            snakeAteInvincibleApple = spawnFood.DoesSnakeAteInvincibleApple(snakePosition);
+            if (snakeAteInvincibleApple)
+            {
+                canSpawnAnotherInvincibleApple = true;
+                ResetInvincibilityTimerSlider();
+                StartCoroutine(MakeTheSnakeInvinsibleForShortTime());
+            }
+        }
+        private void ResetInvincibilityTimerSlider()
+        {
+            invincibleAppleEated = true;
+            time = invincibilityTime;
+        }
+
+
+        private void CheckIfSnakeEatFood()
+        {
+            snakeAteFood = spawnFood.DoesSnakeAteFood(snakePosition);
+            if (snakeAteFood)
+            {
+                ++snakeBodySize;
+                CreateSnakeBodyPart();
+                IncreaseSnakeSpeed();
+            }
+        }
+        
+        private void CheckIfSnakeIsInvincibleOrNot()
+        {
+            if (isInvincible == false)
+                SnakeCollidingWithHisBody();
+        }
+
+        private void SetNewSnakePosition()
+        {
+            Vector3 pos = new Vector3(snakePosition.x, snakePosition.y);
+            transform.position = Vector2.Lerp(transform.position, pos, 1f);
+
+            transform.eulerAngles = new Vector3(0, 0, -GetAngleFromVector(gridMoveDirectionVector) - 180);
+        }
+
+        public void UpdateSnakeBodyPart()
+        {
+            for (int i = 0; i < snakeBodyPartsList.Count; i++)
+            {
+                snakeBodyPartsList[i].SetSnakeMovePosition(snakeMovePosList[i]);
+            }
+        }
+
+        public void spawninvincibleapple()
+        {
+            if (snakeBodySize == 12 || snakeBodySize == 22 || snakeBodySize == 32 || snakeBodySize == 42 ||
+                snakeBodySize == 52 || snakeBodySize == 60 || snakeBodySize == 72 || snakeBodySize == 82
+                || snakeBodySize == 92 || snakeBodySize == 102 || snakeBodySize == 112 || snakeBodySize == 122
+                || snakeBodySize == 132)
+            {
+                canSpawnAnotherInvincibleApple = false;
+                spawnFood.SpawnInvincibleApple();
+            }
+
+        }
+
+        public void CreateSnakeBodyPart()
+        {
+            snakeBodyPartsList.Add(new SnakeBodyPart());
+        }
+
         private void IncreaseSnakeSpeed()
         {
             if (snakeBodySize >= 1 && snakeBodySize <= stopIncreasingSpeedOfSnakeAfter)
@@ -367,6 +446,21 @@ namespace SnakeGame
                 }
             }
         }
+
+        public void SnakeCollidingWithHisBody()
+        {
+            foreach (SnakeMovePosition snakeBodyParts in snakeMovePosList)
+            {
+                snakebodypart = snakeBodyParts.GetGridPosition();
+                if (snakePosition == snakebodypart)
+                {
+                    canWePressButton = false;
+                    GameOver();
+                }
+            }
+        }
+       
+        
         public void ScoreCounter(string nameOfConsumable)
         {
             if (nameOfConsumable == "Jelly")
@@ -381,30 +475,8 @@ namespace SnakeGame
                 fruitsCount += 1;
                 fruitsText.text = fruitsCount.ToString();
             }
-            //SNAKE SPEED AFTER EVERY FOOD EATEN   
-
-
         }
         
-        private void SetNewSnakePosition()
-        {
-            Vector3 pos = new Vector3(snakePosition.x, snakePosition.y);
-            transform.position = Vector2.Lerp(transform.position, pos, 1f);
-
-            transform.eulerAngles = new Vector3(0, 0, -GetAngleFromVector(gridMoveDirectionVector) - 180);
-        }
-        public void SnakeCollidingWithHisBody()
-        {
-            foreach (SnakeMovePosition snakeBodyParts in snakeMovePosList)
-            {
-                snakebodypart = snakeBodyParts.GetGridPosition();
-                if (snakePosition == snakebodypart)
-                {
-                    canWePressButton = false;
-                    GameOver();
-                }
-            }
-        }
 
         private float GetAngleFromVector(Vector2Int direction)
         {
@@ -433,17 +505,6 @@ namespace SnakeGame
             return gridPositionList;
         }
 
-        public void CreateSnakeBodyPart()
-        {
-            snakeBodyPartsList.Add(new SnakeBodyPart());
-        }
-        public void UpdateSnakeBodyPart()
-        {
-            for (int i = 0; i < snakeBodyPartsList.Count; i++)
-            {
-                snakeBodyPartsList[i].SetSnakeMovePosition(snakeMovePosList[i]);
-            }
-        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -456,8 +517,8 @@ namespace SnakeGame
         }
         public void SaveFruitsAndJelly()
         {
-            saveSystem.EncryptPrefsPositive(fruitsCount, password, fruitsEncrypted, fruitsPrefs);
-            saveSystem.EncryptPrefsPositive(jellyCount, password, jellyEncrypted, jellyPrefs);
+            saveSystem.EncryptPrefsPositive(fruitsCount, fruitsEncrypted);
+            saveSystem.EncryptPrefsPositive(jellyCount,jellyEncrypted);
         }
         public void GameOver()
         {
@@ -471,11 +532,6 @@ namespace SnakeGame
 
             isSnakeMoving = false;
             canWePressButton = false;
-
-
-            admanager.RequestRewardedAd();
-            admanager.rewardedAd.OnAdFailedToLoad += HandleRewardedAdFailedToLoad;
-            admanager.rewardedAd.OnAdFailedToShow += HandleRewardedAdFailedToShow;
 
             StartCoroutine(WaitSomeTimeAfterGameOver());
 
@@ -491,116 +547,84 @@ namespace SnakeGame
         }
 
 
-
-        #region ADs
         public void DisplayAd()
         {
-            int a = UnityEngine.Random.Range(0, 5);
+            int a = Random.Range(0, 5);
             if (a == 4 || a == 3)
-                StartCoroutine(ShowInterestialAD());
-        }
-        public void showRewardedAd()
-        {
-            admanager.rewardedAd.OnAdLoaded += HandleOnAdLoaded;
-            admanager.rewardedAd.OnAdOpening += HandleOnAdOpening;
-            admanager.rewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
-            admanager.rewardedAd.OnAdClosed += HandleRewardedAdClosed;
-            if (admanager.rewardedAd.IsLoaded())
-            {
-                admanager.rewardedAd.Show();
-            }
-
-
-
-            admanager.rewardedAd.OnAdClosed += HandleRewardedAdClosed;
+                interstitialAds.ShowAd();
         }
 
-        private void HandleOnAdOpening(object sender, EventArgs e)
-        {
-            SoundManager.Mute();
-        }
-
-        private void HandleRewardedAdFailedToShow(object sender, AdErrorEventArgs e)
-        {
-            SoundManager.AudioResume();
-            adButton.SetActive(false);
-        }
-
-        private void HandleOnAdLoaded(object sender, EventArgs e)
-        {
-            //SoundManager.Mute();
-        }
-
-        private void HandleRewardedAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
-        {
-            adButton.SetActive(false);
-        }
-
-        private void HandleUserEarnedReward(object sender, Reward e)
-        {
-            GiveNewLifeToPlayer();
-        }
-
-        private IEnumerator ShowInterestialAD()
-        {
-            yield return new WaitForSeconds(0.2f);
-            //admanager.RequestInterstitial();
-            if (admanager.interstitial.IsLoaded())
-            {
-                admanager.interstitial.Show();
-            }
-            admanager.interstitial.OnAdClosed += HandleOnAdClosed;
-        }
-
-        private void HandleOnAdClosed(object sender, EventArgs e)
-        {
-            admanager.interstitial.Destroy();
-        }
-        public void HandleRewardedAdClosed(object sender, EventArgs args)
-        {
-            SoundManager.AudioResume();
-            admanager.RequestRewardedAd();
-        }
-    
-
-        #endregion
-        #region Reward
         public void GiveNewLifeToPlayer()
         {
-            //SoundManager.AudioResume();
             isInvincible = true;
-            GameOverPanel.SetActive(false);
             PauseButton.SetActive(true);
             if (PlayerPrefs.GetInt(controls) == 0)
                 buttonControls.SetActive(true);
-            Time.timeScale = 1f;
             isSnakeMoving = true;
             canWePressButton = true;
+            currentTime = startTime;
             StartCoroutine(MakeTheSnakeInvinsibleForShortTime());
+        }
+
+        public void StartTimerForNewLife()
+        {
+            Time.timeScale = 1f;
+            TimerText.gameObject.SetActive(true);
+            TimerText.text = "";
+            GameOverPanel.SetActive(false);
+            isTimerActive = true;
+        }
+        private void Timer()
+        {
+            currentTime -= Time.deltaTime;
+            if (currentTime <= 0)
+            {
+                isTimerActive = false;
+                TimerText.gameObject.SetActive(false);
+                GiveNewLifeToPlayer();
+            }
+            System.TimeSpan time = System.TimeSpan.FromSeconds(currentTime);
+            TimerText.text = time.Seconds.ToString();
+        }
+
+        private void InvinciblityTimer()
+        {
+            InvincibilityTimerGameObject.SetActive(true);
+            if (time >= 0)
+            {
+                time -= Time.deltaTime;
+                invincibleTimerSlider.value = time;
+            }
+            else
+            {
+                stopInvinciblityTimer = true;
+            }
         }
 
         private IEnumerator MakeTheSnakeInvinsibleForShortTime()
         {
             canSpawnAnotherInvincibleApple = false;
             isInvincible = true;
+            InvincibilityTimerGameObject.SetActive(false);
             invincibleEffect.Play();
-            yield return new WaitForSeconds(6f);
+            yield return new WaitForSeconds(invincibilityTime);
+            if(invincibleAppleEated)
+            {
+                float a = time;
+                yield return new WaitForSeconds(a); 
+                invincibleAppleEated = false;
+            }
             invincibleEffect.Stop();
-            yield return new WaitForSeconds(0.1f);
-            invincibleEffect.Play();
-            yield return new WaitForSeconds(0.1f);
-            invincibleEffect.Stop();
-            yield return new WaitForSeconds(0.1f);
-            invincibleEffect.Play();
-            yield return new WaitForSeconds(0.1f);
-            invincibleEffect.Stop();
-            yield return new WaitForSeconds(0.5f);
-
             isInvincible = false;
+            yield return new WaitForSeconds(1.2f);
+            InvincibilityTimerGameObject.SetActive(false);
+            invincibleTimerSlider.value = invincibilityTime;
+            time = invincibilityTime;
+            stopInvinciblityTimer = false;
             canSpawnAnotherInvincibleApple = true;
 
+
         }
-        #endregion
 
         private void MobileControls()
         {
@@ -645,8 +669,6 @@ namespace SnakeGame
                 stopTouch = false;
 
                 endTouchPosition = Input.GetTouch(0).position;
-
-                //Vector2 Distance = endTouchPosition - startTouchPosition;
             }
 
         }
@@ -782,20 +804,6 @@ namespace SnakeGame
                 }
             }
 
-        }
-
-
-        public void spawninvincibleapple()
-        {
-            if (snakeBodySize == 12|| snakeBodySize == 22 || snakeBodySize == 32 || snakeBodySize == 42 ||
-                snakeBodySize == 52 || snakeBodySize == 60 || snakeBodySize == 72 || snakeBodySize == 82
-                || snakeBodySize == 92 || snakeBodySize == 102 || snakeBodySize == 112 || snakeBodySize == 122
-                || snakeBodySize == 132) 
-            {
-                canSpawnAnotherInvincibleApple = false;
-                spawnFood.SpawnInvincibleApple();
-            }
-            
         }
 
     }

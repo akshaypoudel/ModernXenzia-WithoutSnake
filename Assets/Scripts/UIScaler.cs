@@ -1,7 +1,6 @@
 using UnityEngine.Events;
 using UnityEngine;
-using GoogleMobileAds.Api;
-using GoogleMobileAds.Common;
+
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;

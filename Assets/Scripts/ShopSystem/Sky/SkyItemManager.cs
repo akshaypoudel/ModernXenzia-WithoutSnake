@@ -74,7 +74,7 @@ public class SkyItemManager : MonoBehaviour
 
     public void GetCoins()
     {
-        coins = saveSystem.ReturnDecryptedScore(password, fruitsEncrypted,fruitsPrefs);
+        coins = saveSystem.ReturnDecryptedScore(fruitsEncrypted);
 
     }
     private void AssignButtons()
@@ -128,7 +128,7 @@ public class SkyItemManager : MonoBehaviour
             coins = coins - skyItemSO[buttonNumber].baseCost;
             coinUI.text = coins.ToString();
             int tempCoin = skyItemSO[buttonNumber].baseCost;
-            saveSystem.EncryptPrefsNegative(tempCoin, password, fruitsEncrypted, fruitsPrefs);
+            saveSystem.EncryptPrefsNegative(tempCoin, fruitsEncrypted);
             CheckPurchasable();
 
             stageItemManager.GetCoins();

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage11
   m_EditorClassIdentifier: 
-  Price: 1200
+  Price: 800
   Name: AbstractWall
   materialOfObject: {fileID: 2100000, guid: e94c7625cd2e80d4e8fd19b24fc89d93, type: 2}
-  baseCost: 1200
+  baseCost: 800

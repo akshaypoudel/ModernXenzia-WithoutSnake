@@ -40,7 +40,7 @@ public class ShopItemManager : MonoBehaviour
     }
     public void GetCoins()
     {        
-        availablejellyCount = saveSystem.ReturnDecryptedScore(password,jellyEncrypted,jellyPrefs);
+        availablejellyCount = saveSystem.ReturnDecryptedScore(jellyEncrypted);
     }
 
 
@@ -79,13 +79,13 @@ public class ShopItemManager : MonoBehaviour
         {
             availablejellyCount = availablejellyCount - shopItemSO[buttonNumber].JellyCost;
             JellyUIText.text = availablejellyCount.ToString();
-            int fruitsCountValue = saveSystem.ReturnDecryptedScore(password,fruitsEncrypted,fruitsPrefs);
+            int fruitsCountValue = saveSystem.ReturnDecryptedScore(fruitsEncrypted);
             int totalFruits = fruitsCountValue + shopItemSO[buttonNumber].fruitsValue;
             FruitsUIText.text = totalFruits.ToString();
             int tempJelly = shopItemSO[buttonNumber].JellyCost;
             int tempFruits = shopItemSO[ buttonNumber].fruitsValue;
-            saveSystem.EncryptPrefsPositive(tempFruits, password, fruitsEncrypted, fruitsPrefs);
-            saveSystem.EncryptPrefsNegative(tempJelly, password,jellyEncrypted,jellyPrefs);
+            saveSystem.EncryptPrefsPositive(tempFruits, fruitsEncrypted);
+            saveSystem.EncryptPrefsNegative(tempJelly,jellyEncrypted);
             CheckPurchasable();
             
             //checking for available coins to purchase in stage tab

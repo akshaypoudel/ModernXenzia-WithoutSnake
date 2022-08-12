@@ -73,7 +73,7 @@ public class SkinItemManager : MonoBehaviour
     }
     public void GetCoins()
     {
-        coins = saveSystem.ReturnDecryptedScore(password, fruitsEncrypted, fruitsPrefs);
+        coins = saveSystem.ReturnDecryptedScore(fruitsEncrypted);
     }
 
     public void AssignButtons()
@@ -128,14 +128,12 @@ public class SkinItemManager : MonoBehaviour
             coins = coins - skinItemSO[buttonNumber].baseCost;
             coinUI.text = coins.ToString();
             int tempCoin = skinItemSO[buttonNumber].baseCost;
-            saveSystem.EncryptPrefsNegative(tempCoin, password, fruitsEncrypted, fruitsPrefs);
+            saveSystem.EncryptPrefsNegative(tempCoin, fruitsEncrypted);
             CheckPurchasable();
             skyItemManager.GetCoins();
             skyItemManager.CheckPurchasable();
             stageItemManager.GetCoins();
             stageItemManager.CheckPurchasable();
-
-
             Select(buttonNumber);
         }
     }

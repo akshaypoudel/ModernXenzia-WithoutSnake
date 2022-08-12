@@ -17,16 +17,7 @@ namespace SnakeGame
         private string controls = "WhichControls";
         
         private string nameOfScene="";
-       
-        
-        PlayerPrefsSaveSystem saveSystem=new PlayerPrefsSaveSystem();
 
-       /* private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-                Time.timeScale = 0f;          
-        }
-       */
         public void LoadCurrentScene()
         {
             Time.timeScale = 1f;
@@ -37,8 +28,6 @@ namespace SnakeGame
             Time.timeScale = 1f;
             SceneManager.LoadScene(_name);
         }
-        
-
         public void RestartGame()
         {
             Time.timeScale = 1f;
@@ -50,7 +39,6 @@ namespace SnakeGame
             {
                 SelectControls.SetActive(true);
                 nameOfScene = sceneName;
-                PlayerPrefs.SetInt(touchControls, 11);
             }
             else
             {
@@ -63,7 +51,6 @@ namespace SnakeGame
             {
                 SelectControls.SetActive(true);
                 nameOfScene=sceneName;
-                PlayerPrefs.SetInt(touchControls,11);
             }
             else
             {
@@ -74,11 +61,13 @@ namespace SnakeGame
         public void PlayWithTouchControls()
         {
             PlayerPrefs.SetInt(controls,1);
+            PlayerPrefs.SetInt(touchControls, 11);
             SceneManager.LoadScene(nameOfScene);
         }
         public void PlayWithButtonControls()
         {
             PlayerPrefs.SetInt(controls,0);
+            PlayerPrefs.SetInt(touchControls, 11);
             SceneManager.LoadScene(nameOfScene);
 
         }

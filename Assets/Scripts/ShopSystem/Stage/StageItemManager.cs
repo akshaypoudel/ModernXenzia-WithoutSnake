@@ -79,7 +79,7 @@ namespace SnakeGame.ShopSystem
         }
         public void GetCoins()
         {
-            coins = saveSystem.ReturnDecryptedScore(password,fruitsEncrypted,fruitsPrefs);
+            coins = saveSystem.ReturnDecryptedScore(fruitsEncrypted);
         }
         public void AssignButtons()
         {
@@ -133,7 +133,7 @@ namespace SnakeGame.ShopSystem
                 coins = coins - stageItemSO[buttonNumber].baseCost;
                 coinUI.text = coins.ToString();
                 int tempCoin = stageItemSO[buttonNumber].baseCost;
-                saveSystem.EncryptPrefsNegative(tempCoin, password,fruitsEncrypted,fruitsPrefs);
+                saveSystem.EncryptPrefsNegative(tempCoin,fruitsEncrypted);
                 CheckPurchasable();
                 Select(buttonNumber);
 

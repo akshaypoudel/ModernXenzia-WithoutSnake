@@ -35,7 +35,7 @@ public class PlayModeItemManager : MonoBehaviour
     }
     public void GetCoins()
     {
-        coins = saveSystem.ReturnDecryptedScore(password, fruitsEncrypted,fruitsPrefs);
+        coins = saveSystem.ReturnDecryptedScore( fruitsEncrypted);
     }
     public void CheckPurchasable()
     {

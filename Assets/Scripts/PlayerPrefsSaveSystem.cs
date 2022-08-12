@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityCipher;
@@ -8,91 +6,83 @@ namespace SnakeGame{
     [System.Serializable]
     public class PlayerPrefsSaveSystem
     {
-        public void EncryptPrefsPositive(int Score,string password,string encryptedPrefs,string playerPrefs)
-        {
-            int tempVar;
-            tempVar = Score;
-            if (PlayerPrefs.HasKey(playerPrefs))
-            {
-                tempVar += PlayerPrefs.GetInt(playerPrefs);
-                PlayerPrefs.SetInt(playerPrefs, tempVar);
+        private string password = "((%##@&&)*";
 
-                string encrypt = RijndaelEncryption.Encrypt(PlayerPrefs.GetInt(playerPrefs).ToString(), password);
+        public void EncryptPrefsPositive(int score, string encryptedPrefs)
+        {
+            int Score = score;
+            int temp;
+            if (PlayerPrefs.HasKey(encryptedPrefs))
+            {
+                temp = int.Parse(RijndaelEncryption.Decrypt(PlayerPrefs.GetString(encryptedPrefs), password));
+
+                Score += temp;
+
+                string encrypt = RijndaelEncryption.Encrypt(Score.ToString(), password);
 
                 PlayerPrefs.SetString(encryptedPrefs, encrypt);
             }
             else
             {
-                PlayerPrefs.SetInt(playerPrefs, Score);
-                string encrypt = RijndaelEncryption.Encrypt(PlayerPrefs.GetInt(playerPrefs).ToString(), password);
+                string encrypt = RijndaelEncryption.Encrypt(Score.ToString(), password);
 
                 PlayerPrefs.SetString(encryptedPrefs, encrypt);
             }
-
         }
-        public void DecryptPrefs(TMP_Text fruitsCount,string password,string encryptedPrefs,string playerPrefs)
+
+
+
+        public void DecryptPrefs(TMP_Text fruitsCount, string Eprefs)
         {
-            if (PlayerPrefs.HasKey(encryptedPrefs))
+            if (PlayerPrefs.HasKey(Eprefs))
             {
-                int a = int.Parse(RijndaelEncryption.Decrypt(PlayerPrefs.GetString(encryptedPrefs), password));
+                int a = int.Parse(RijndaelEncryption.Decrypt(PlayerPrefs.GetString(Eprefs), password));
                 fruitsCount.text = a.ToString();
             }
             else
             {
-                if (PlayerPrefs.HasKey(playerPrefs))
-                    fruitsCount.text = PlayerPrefs.GetInt(playerPrefs).ToString();
-                else
-                {
-                    string a = "0";
-                    fruitsCount.text = a;
-                }
+                fruitsCount.text = "0";
             }
         }
-    
-        public int ReturnDecryptedScore(string password,string encryptedPrefs,string playerPrefs)
+
+
+        public int ReturnDecryptedScore(string Eprefs)
         {
-            if (PlayerPrefs.HasKey(encryptedPrefs))
+            if (PlayerPrefs.HasKey(Eprefs))
             {
-                int a = int.Parse(RijndaelEncryption.Decrypt(PlayerPrefs.GetString(encryptedPrefs), password));
+                int a = int.Parse(RijndaelEncryption.Decrypt(PlayerPrefs.GetString(Eprefs), password));
                 return a;
             }
             else
             {
-                if(PlayerPrefs.HasKey(playerPrefs))
-                {
-                    string encrypt = RijndaelEncryption.Encrypt(PlayerPrefs.GetInt(playerPrefs).ToString(),password);
-                    PlayerPrefs.SetString(encryptedPrefs,encrypt);
-
-                }
-                else
-                    PlayerPrefs.SetInt(playerPrefs,0);
                 return 0;
             }
         }
-        public void EncryptPrefsNegative(int Score,string password,string encryptedPrefs,string playerPrefs)
+        public void EncryptPrefsNegative(int Score, string Eprefs)
         {
             int tempVar;
-            tempVar = Score;
-            if (PlayerPrefs.HasKey(playerPrefs))
+            if (Score < 0)
+                tempVar = 0;
+            else
+                tempVar = Score;
+            if (PlayerPrefs.HasKey(Eprefs))
             {
-                tempVar = PlayerPrefs.GetInt(playerPrefs) - tempVar;
-                PlayerPrefs.SetInt(playerPrefs, tempVar);
+                int a = int.Parse(RijndaelEncryption.Decrypt(PlayerPrefs.GetString(Eprefs), password));
 
-                string encrypt = RijndaelEncryption.Encrypt(PlayerPrefs.GetInt(playerPrefs).ToString(), password);
+                tempVar = a - tempVar;
 
-                PlayerPrefs.SetString(encryptedPrefs, encrypt);
+                string encrypt = RijndaelEncryption.Encrypt(tempVar.ToString(), password);
+
+                PlayerPrefs.SetString(Eprefs, encrypt);
             }
             else
             {
-                PlayerPrefs.SetInt(playerPrefs, Score);
+                string encrypt = RijndaelEncryption.Encrypt(Score.ToString(), password);
 
-                string encrypt = RijndaelEncryption.Encrypt(PlayerPrefs.GetInt(playerPrefs).ToString(), password);
-
-                PlayerPrefs.SetString(encryptedPrefs, encrypt);
+                PlayerPrefs.SetString(Eprefs, encrypt);
             }
 
         }
-    
-        
+
     }
 }
