@@ -9,14 +9,14 @@ namespace SnakeGame
 
     public class GameHandler : MonoBehaviour
     {
-        public Material []BGArray;
+        public Material []stageElementsMaterial;
         public GameObject ButtonControls;
 
         public GameObject snake;
         public Sprite[] snakeBodySprite;
         public int spawnPosX, spawnPosY;
         [SerializeField] private SnakeHandler snakeHandler;
-        public GameObject BG;
+        public GameObject gameBackGround;
         private SpawnFood spawnFood1;
         private string indexOfMat = "indexOfMaterial1";
         private string indexOfSkyBox = "indexOfSkyBoxes1";
@@ -36,7 +36,7 @@ namespace SnakeGame
             CheckControls();
 
             RenderSettings.skybox = GameAssets.i.skyboxes[PlayerPrefs.GetInt(indexOfSkyBox)];
-            BG.GetComponent<MeshRenderer>().material = BGArray[PlayerPrefs.GetInt(indexOfMat)];                                             
+            gameBackGround.GetComponent<MeshRenderer>().material = stageElementsMaterial[PlayerPrefs.GetInt(indexOfMat)];                                             
             snake.GetComponent<SpriteRenderer>().sprite = snakeBodySprite[PlayerPrefs.GetInt(indexOfSkin)];
             
         }

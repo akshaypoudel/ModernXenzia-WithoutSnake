@@ -19,19 +19,10 @@ public class PlayModeItemManager : MonoBehaviour
 
     private string fruitsEncrypted = "FruitsEncrypted";
     private string fruitsPrefs = "Fruits";
-    //private string jellyPrefs = "Jelly";
-    //private string jellyEncrypted = "JellyEncrypted";
 
     private void Start()
     {
-        //GetCoins();
-        //AssignButtons();
-        //for (int i = 0; i < playModeTemplateGameObjects.Length; i++)
-        //{
-        //    playModeTemplateGameObjects[i].SetActive(true);
-        //}
         LoadPanel();
-        //CheckPurchasable();
     }
     public void GetCoins()
     {
@@ -59,7 +50,6 @@ public class PlayModeItemManager : MonoBehaviour
             playModeTemplates[i].TitleText.text = playModeItemSO[i].Price;
             playModeTemplates[i].BGSprite = stageBGImage[i];
             LoadImageOfPanels(i);
-            //stageTemplates[i].CostText.text = stageItemSO[i].baseCost.ToString();
         }
     }
     public void LoadImageOfPanels(int i)

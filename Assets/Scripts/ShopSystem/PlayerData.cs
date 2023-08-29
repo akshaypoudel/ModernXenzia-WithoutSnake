@@ -23,8 +23,6 @@ public class PlayerDataEncrypted
     public string No; //button number
     public bool yieldd; //button to set active
     public bool NetworkBuild; //button to set inactive
-    
     public bool TIO00_UGG; //variable for removing fruit icon after purchasing
-
     public string name; //name of object
 }

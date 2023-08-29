@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6552dbec877df79469184d5704a0721e, type: 3}
   m_Name: SkyMenu 7
   m_EditorClassIdentifier: 
-  Price: 720
+  Price: 600
   Name: RainyNight
   materialOfObject: {fileID: 0}
-  baseCost: 720
+  baseCost: 600

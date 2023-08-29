@@ -34,8 +34,6 @@ namespace SnakeGame.ShopSystem
 
         private string jsonFileName = "LOG_UNIT_GRADLE_ID_99gh68tt33.json";
         private string fruitsEncrypted = "FruitsEncrypted";
-        private string fruitsPrefs = "Fruits";
-        //private string isSaved= "isStageSaved";
         private string indexOfMat = "indexOfMaterial1";
         private string persistantDataPath="";
 
@@ -52,9 +50,6 @@ namespace SnakeGame.ShopSystem
             saveSystemWithJson = new SaveLoadJSONData();
             playerDataNumber = new PlayerDataNumber();
             persistantDataPath=Application.persistentDataPath+Path.AltDirectorySeparatorChar;
-            //CheckPurchasable();
-            
-
         }
         void Start()
         {

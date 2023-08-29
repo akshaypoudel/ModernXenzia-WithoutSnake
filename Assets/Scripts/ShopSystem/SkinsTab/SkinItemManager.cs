@@ -128,8 +128,10 @@ public class SkinItemManager : MonoBehaviour
             coins = coins - skinItemSO[buttonNumber].baseCost;
             coinUI.text = coins.ToString();
             int tempCoin = skinItemSO[buttonNumber].baseCost;
+
             saveSystem.EncryptPrefsNegative(tempCoin, fruitsEncrypted);
             CheckPurchasable();
+
             skyItemManager.GetCoins();
             skyItemManager.CheckPurchasable();
             stageItemManager.GetCoins();
@@ -155,8 +157,6 @@ public class SkinItemManager : MonoBehaviour
             }
             SelectedButtons[buttonNumber].SetActive(true);
             PlayerPrefs.SetInt(indexOfMat, buttonNumber);
-            
-
         }
     }
     public void Select(int buttonNumber)
@@ -178,10 +178,6 @@ public class SkinItemManager : MonoBehaviour
         playerdata.removeFruitIcon = isNotActive;
         playerdata.nameOfUnlockedObject = nameOfObject;
         SaveEncryptedData(playerdata);
-
-       // playerDataNumber.playerDataList.Add(playerdata);
-
-        //saveSystemWithJson.SavePlayerDataNumber(playerDataNumber, jsonFileName);
     }
     private void SaveEncryptedData(PlayerData playerdata)
     {

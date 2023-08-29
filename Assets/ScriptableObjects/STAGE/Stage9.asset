@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage9
   m_EditorClassIdentifier: 
-  Price: 650
+  Price: 400
   Name: SnowyPattern
   materialOfObject: {fileID: 2100000, guid: ebabfdf81fc72414f9921cfe2ed4b652, type: 2}
-  baseCost: 650
+  baseCost: 400

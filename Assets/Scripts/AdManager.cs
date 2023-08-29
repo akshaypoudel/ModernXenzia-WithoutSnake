@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Advertisements;
-using System;
 using SnakeGame.ShopSystem;
 using SnakeGame;
 using TMPro;
@@ -14,7 +13,6 @@ public class AdManager : MonoBehaviour, IUnityAdsInitializationListener
 
     [SerializeField]private string password;
     public bool isMenuScene;
-    private bool _isTestMode = true;
 
     [Header("---------Menu Scene Only Data---------\n")]
 
@@ -29,20 +27,15 @@ public class AdManager : MonoBehaviour, IUnityAdsInitializationListener
     public SkyItemManager skyItemManager;
     public SkinItemManager skinItemManager;
 
-    private string _gameId = "4752355";
+    [SerializeField]private string _gameId;
     
     private bool canInitializeAds;
 
     private string fruitsEncrypted = "FruitsEncrypted";
-    private string fruitsPrefs = "Fruits";
-
-    private string interestialAdId = "Interstitial_Android";
-    private string rewardAdId = "Rewarded_Android";
 
 
     void Awake()
     {
-        _isTestMode = true;
         InitializeAds();
         if (canInitializeAds)
         {

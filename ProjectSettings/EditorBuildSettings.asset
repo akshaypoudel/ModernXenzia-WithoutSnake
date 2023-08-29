@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Adventure Mode.unity
     guid: d1e1535e182850b41baa5931a1babe87
+  - enabled: 1
+    path: Assets/Scenes/ExtremeMode.unity
+    guid: 1c30c54e44c53174ebc2459bb202febc
   m_configObjects: {}

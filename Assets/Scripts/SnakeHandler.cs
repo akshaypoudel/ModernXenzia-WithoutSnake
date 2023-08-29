@@ -23,8 +23,6 @@ namespace SnakeGame
 
         #region PlayerPrefsStrings
         private string fruitsEncrypted = "FruitsEncrypted";
-        private string fruitsPrefs = "Fruits";
-        private string jellyPrefs = "Jelly";
         private string jellyEncrypted = "JellyEncrypted";
         private string controls = "WhichControls";
         #endregion
@@ -69,6 +67,8 @@ namespace SnakeGame
         [SerializeField] private float invincibilityTime;
         private bool stopInvinciblityTimer;
         private float time;
+
+        private const float SNAKE_SPEED_INCREASE_PER_FOOD_EATEN=0.006f;
 
         #endregion
 
@@ -121,9 +121,6 @@ namespace SnakeGame
         [SerializeField] private InterstitialAds interstitialAds;
         #endregion
 
-        #endregion
-
-
         private Vector2Int gridMoveDirectionVector;
         private SnakeMovePosition previousSnakeMovePosition = null;
         private SnakeMovePosition snakeMovePosition1;
@@ -145,6 +142,8 @@ namespace SnakeGame
 
         #endregion
 
+        #endregion
+        
         private void Start()
         {
             UIButtonClick();
@@ -181,7 +180,7 @@ namespace SnakeGame
         private void FixedUpdate()
         {
             if (isSnakeMoving)
-                HandleGridMovement();  //function for handling snake position
+                HandleSnakeMovement();  //function for handling snake position
         }
 
         private void Update()
@@ -192,10 +191,8 @@ namespace SnakeGame
 #endif
             if (canWePressButton && isTouchControls)
                  MobileControls();
-
             if (isTimerActive)
                 Timer();
-
             if (isInvincible && !stopInvinciblityTimer)
             {
                 InvinciblityTimer();
@@ -263,7 +260,7 @@ namespace SnakeGame
         #endregion
 
 
-        private void HandleGridMovement()
+        private void HandleSnakeMovement()
         {
             snakeMoveTimer += Time.deltaTime;
             if (snakeMoveTimer >= snakeMoveTimerMax)
@@ -284,6 +281,7 @@ namespace SnakeGame
                 {
                     snakeMovePosList.RemoveAt(snakeMovePosList.Count - 1);
                 }
+                
                 CheckIfSnakeIsInvincibleOrNot();
 
                 SetNewSnakePosition();
@@ -398,49 +396,40 @@ namespace SnakeGame
 
         private void IncreaseSnakeSpeed()
         {
+            float speedAfterLongSnake=0.0021f;
             if (snakeBodySize >= 1 && snakeBodySize <= stopIncreasingSpeedOfSnakeAfter)
             {
                 switch (snakeBodySize)
                 {
                     case 1:
-                        snakeMoveTimerMax -= (0.005f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     case 2:
-                        snakeMoveTimerMax -= (0.007f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     case 3:
-                        snakeMoveTimerMax -= (0.007f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     case 4:
-                        snakeMoveTimerMax -= (0.008f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     case 5:
-                        snakeMoveTimerMax -= (0.0085f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     case 6:
-                        snakeMoveTimerMax -= (0.008f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     case 7:
-                        snakeMoveTimerMax -= (0.008f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     case 8:
-                        snakeMoveTimerMax -= (0.008f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
-                    case 13:
-                        snakeMoveTimerMax -= (0.006f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                    case 9:
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN;
                         break;
                     default:
-                        snakeMoveTimerMax -= (0.005f);
-                        //Debug.Log("SnakeSpeed: " + snakeMoveTimerMax);
+                        snakeMoveTimerMax -= SNAKE_SPEED_INCREASE_PER_FOOD_EATEN-speedAfterLongSnake;
                         break;
 
                 }
@@ -607,6 +596,9 @@ namespace SnakeGame
             isInvincible = true;
             InvincibilityTimerGameObject.SetActive(false);
             invincibleEffect.Play();
+            
+            CheckIfFirstTimeInvincibilityAppleEaten();
+
             yield return new WaitForSeconds(invincibilityTime);
             if(invincibleAppleEated)
             {
@@ -614,6 +606,7 @@ namespace SnakeGame
                 yield return new WaitForSeconds(a); 
                 invincibleAppleEated = false;
             }
+
             invincibleEffect.Stop();
             isInvincible = false;
             yield return new WaitForSeconds(1.2f);
@@ -622,8 +615,10 @@ namespace SnakeGame
             time = invincibilityTime;
             stopInvinciblityTimer = false;
             canSpawnAnotherInvincibleApple = true;
-
-
+        }
+        public void CheckIfFirstTimeInvincibilityAppleEaten()
+        {
+            
         }
 
         private void MobileControls()

@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 16, y: 10, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5819412815086916027}
   - {fileID: 5819412815169221003}
@@ -108,25 +109,28 @@ MonoBehaviour:
   downButton: {fileID: 0}
   downButton1: {fileID: 0}
   password: ((%##@&&)*
-  snakeMoveTimerMax: 0.2
-  snakeSpeed: 0.062
+  snakeMoveTimerMax: 0.17
+  snakeSpeed: 0.07
   stopIncreasingSpeedOfSnakeAfter: 16
   isObstacleMode: 0
-  canSpawnAnotherInvincibleApple: 1
   overlapSphereRadius: 0.8
+  invincibleTimerSlider: {fileID: 0}
+  invincibilityTime: 0
   fruitsText: {fileID: 0}
   jellyText: {fileID: 0}
-  scoreText: {fileID: 0}
+  TimerText: {fileID: 0}
   obstacles: []
   GameOverPanel: {fileID: 0}
   PauseButton: {fileID: 0}
   adButton: {fileID: 0}
   buttonControls: {fileID: 0}
+  InvincibilityTimerGameObject: {fileID: 0}
   colliders: []
   invincibleEffect: {fileID: 1146915281464292832}
   snakePosAtTheTimeOfSceneLoading: {x: 16, y: 10}
   anim: {fileID: 0}
   admanager: {fileID: 0}
+  interstitialAds: {fileID: 0}
   isTouchControls: 0
   swipeRange: 140
   jumpRange: 140

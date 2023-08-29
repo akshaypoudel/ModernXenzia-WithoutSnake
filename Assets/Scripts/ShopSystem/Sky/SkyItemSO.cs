@@ -9,7 +9,5 @@ public class SkyItemSO : ScriptableObject
 {
     public string Price;
     public string Name;
-    //private Image PreviewImage;
-    public Material materialOfObject;
     public int baseCost;
 }

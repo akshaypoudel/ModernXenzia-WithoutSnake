@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage2
   m_EditorClassIdentifier: 
-  Price: 100
+  Price: 50
   Name: CobbleStone
   materialOfObject: {fileID: 2100000, guid: d7345edb353d0794296950a9adb3ad4d, type: 2}
-  baseCost: 100
+  baseCost: 50

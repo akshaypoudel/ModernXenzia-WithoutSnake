@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage6
   m_EditorClassIdentifier: 
-  Price: 300
+  Price: 250
   Name: LeafyGround
   materialOfObject: {fileID: 2100000, guid: 0c2d13c3615510e4a8debaef5c39c3de, type: 2}
-  baseCost: 300
+  baseCost: 250

@@ -12,15 +12,15 @@ public class LoadImportantData : MonoBehaviour
     // public GameObject adbutton;
     public TMP_Text fruitstext;
     private string fruitsEncrypted = "FruitsEncrypted";
-    private string fruitsPrefs = "Fruits";
-    private string jellyPrefs = "Jelly";
     public int welcomeBonusFruitCount;
     private string jellyEncrypted = "JellyEncrypted";
     private string bonusClaimedPrefs = "isBonusClaimed";
-    //private string canWatchAd = "WatchAD";
+    private string freeGiftClaimPrefs = "isFreeGiftClaimed";
     PlayerPrefsSaveSystem saveSystem = new PlayerPrefsSaveSystem();
     public GameObject WelcomeBonusWindow;
     public GameObject welcomeBonusButton;
+    public GameObject freeGiftClaimButton;
+    public GameObject freeGiftClaimWindow;
 
     public DisableBGComponents bgDisable;
     public StageItemManager stageItemManager;
@@ -35,6 +35,10 @@ public class LoadImportantData : MonoBehaviour
 
         if (PlayerPrefs.HasKey(bonusClaimedPrefs))
             welcomeBonusButton.SetActive(false);
+        if(PlayerPrefs.HasKey(freeGiftClaimPrefs))
+        {
+            freeGiftClaimButton.SetActive(false);
+        }
     }
     public void WelcomeBonusClaim()
     {
@@ -42,6 +46,13 @@ public class LoadImportantData : MonoBehaviour
         welcomeBonusButton.SetActive(false);
         WelcomeBonusWindow.SetActive(true);
         GiveFruitsToUser(welcomeBonusFruitCount);
+    }
+    public void FreeGiftClaim()
+    {
+        PlayerPrefs.SetInt(freeGiftClaimPrefs,1);
+        freeGiftClaimButton.SetActive(false);
+        freeGiftClaimWindow.SetActive(true);
+        bgDisable.DisableAllBgComponents();
     }
     private void GiveFruitsToUser(int fruitCount)
     {
@@ -54,7 +65,6 @@ public class LoadImportantData : MonoBehaviour
         bgDisable.DisableAllBgComponents();
         saveSystem.EncryptPrefsPositive(fruitsToGive, fruitsEncrypted);
         RefreshTheCoinAmount();
-
     }
 
     private void RefreshTheCoinAmount()

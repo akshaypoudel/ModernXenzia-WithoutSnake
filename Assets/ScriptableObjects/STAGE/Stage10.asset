@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fa6f7d42e6e974385dd3e719807eea, type: 3}
   m_Name: Stage10
   m_EditorClassIdentifier: 
-  Price: 700
+  Price: 420
   Name: MagicBrick
   materialOfObject: {fileID: 2100000, guid: 7f46efa3bb98bb44ea780a4a417b4f75, type: 2}
-  baseCost: 700
+  baseCost: 420

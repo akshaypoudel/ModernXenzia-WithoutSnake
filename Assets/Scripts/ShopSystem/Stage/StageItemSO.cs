@@ -9,8 +9,6 @@ public class StageItemSO : ScriptableObject
 {                        
     public string Price;
     public string Name;
-    private Image PreviewImage;
-    public Material materialOfObject;
     public int baseCost;
 }
 
