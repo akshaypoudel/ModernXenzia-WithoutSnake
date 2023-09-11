@@ -393,7 +393,6 @@ namespace SnakeGame
         {
             snakeBodyPartsList.Add(new SnakeBodyPart());
         }
-
         private void IncreaseSnakeSpeed()
         {
             float speedAfterLongSnake=0.0021f;
